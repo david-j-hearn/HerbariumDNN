@@ -1,5 +1,7 @@
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,7 +27,13 @@ public class Frame_SetUserInfo extends javax.swing.JFrame {
         initComponents();
         this.fds = fds;
         time = new Date().getTime();
-        this.TextField_RootDirectory.setText(fds.rootDirectory);
+
+        String directory = getDirectoryFromFile();
+        if (directory == null) {
+            this.TextField_RootDirectory.setText(fds.rootDirectory);
+        } else {
+            this.TextField_RootDirectory.setText(directory);
+        }
         /*
         this.TextField_Attributes.setText(fds.defaultAttributesDirectory);
         this.TextField_Characters.setText(fds.defaultCharactersDirectory);
@@ -36,11 +44,32 @@ public class Frame_SetUserInfo extends javax.swing.JFrame {
         this.TextField_Medium.setText(Integer.toString(fds.defaultWindowSize));
         this.TextField_Large.setText(Integer.toString(fds.defaultOverviewSize));
         this.TextField_MinimumSize.setText(Integer.toString(fds.defaultImageWidth));
-*/
+         */
         fsrd = new Frame_SelectRootDirectory(this);
         if (this.TextField_RootDirectory.getText().length() > 0) {
             fsrd.setDirectory(this.TextField_RootDirectory.getText());
         }
+    }
+
+    private String getDirectoryFromFile() {
+        String defaultFile = "root.directory";
+        try {
+            if (Files.exists(Paths.get(defaultFile))) {
+                BufferedReader br = new BufferedReader(new FileReader(defaultFile));
+                String root = br.readLine();
+                br.close();
+                if (root != null) {
+                    if (root.length() > 0) {
+                        return root;
+                    }
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
     }
 
     /**
@@ -107,15 +136,15 @@ public class Frame_SetUserInfo extends javax.swing.JFrame {
         Panel_SessionInfo.setLayout(Panel_SessionInfoLayout);
         Panel_SessionInfoLayout.setHorizontalGroup(
             Panel_SessionInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel_SessionInfoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(Panel_SessionInfoLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(Panel_SessionInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Label_Name)
                     .addComponent(Label_Session))
                 .addGap(65, 65, 65)
                 .addGroup(Panel_SessionInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TextField_Session, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TextField_Name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TextField_Session)
+                    .addComponent(TextField_Name))
                 .addContainerGap())
         );
         Panel_SessionInfoLayout.setVerticalGroup(
@@ -151,8 +180,8 @@ public class Frame_SetUserInfo extends javax.swing.JFrame {
             .addGroup(Panel_DirectoriesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Button_RootDirectory)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(TextField_RootDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(TextField_RootDirectory)
                 .addContainerGap())
         );
         Panel_DirectoriesLayout.setVerticalGroup(
@@ -173,14 +202,13 @@ public class Frame_SetUserInfo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Label_Title)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(Panel_Directories, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Panel_SessionInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Panel_Directories, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Panel_SessionInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Button_OK)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Button_Cancel)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,14 +216,14 @@ public class Frame_SetUserInfo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(Label_Title)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Panel_SessionInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Panel_SessionInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Panel_Directories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Panel_Directories, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Button_OK)
                     .addComponent(Button_Cancel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -234,9 +262,8 @@ public class Frame_SetUserInfo extends javax.swing.JFrame {
         fds.defaultWindowSize = Integer.parseInt(this.TextField_Medium.getText());
         fds.defaultOverviewSize = Integer.parseInt(this.TextField_Large.getText());
         fds.defaultImageWidth = Integer.parseInt(this.TextField_MinimumSize.getText());
-        */
-        
-        /*
+         */
+ /*
         //make and use a static method that checks / creates the directories as needed!!;
         try {
             Files.createDirectories(Paths.get(fds.rootDirectory + File.separator + fds.defaultImagesDirectory));
@@ -312,9 +339,9 @@ public class Frame_SetUserInfo extends javax.swing.JFrame {
 
 //Logger.getLogger(Frame_Parameters.class.getName()).log(Level.SEVERE, null, ex);
         }
-*/
-
+         */
         fds.initializeDataFromDefaults();
+        fds.pack();
         fds.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Button_OKMouseClicked

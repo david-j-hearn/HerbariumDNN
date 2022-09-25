@@ -214,14 +214,20 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         fp.disableParameterEditing();
 
         //colors
-        if (this.fsc == null) {
-            fsc = new Frame_SelectionColors(this);
-        }
-
+        //if (this.fsc == null) {
+        //    fsc = new Frame_SelectionColors(this);
+        //}
         //Colors don't influence sample properties!! No need to disable!!
         //fsc.disableColorSecting();
         //text fields
         disableSamplingTextFields();
+        disableFileSelectionMenuItems();
+    }
+
+    private void disableFileSelectionMenuItems() {
+        this.MenuItem_OpenAddedAttributeFile.setEnabled(false);
+        this.MenuItem_OpenCharactersFile.setEnabled(false);
+        this.MenuItem_OpenImagesDirectory.setEnabled(false);
     }
 
     private void disableSamplingTextFields() {
@@ -230,10 +236,45 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         TextField_WindowSize.setEnabled(false);
     }
 
+    void setProjectCharactersFile() {
+        if (characterFile != null) {
+            if (characterFile.length() > 0) {
+                String charFile = this.rootDirectory + separator + this.defaultCharactersDirectory + separator + characterFile;
+                String projCharFile = rootDirectory + separator + defaultSamplesDirectory + separator + projectName + separator + defaultCharactersFile;
+                try {
+                    if (Files.exists(Paths.get(charFile)) && !Files.exists(Paths.get(projCharFile))) {
+                        Files.copy(Paths.get(charFile), Paths.get(projCharFile));
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        }
+    }
+
+    void setProjectAttributesFile() {
+        if (attributesFile != null) {
+            if (attributesFile.length() > 0) {
+                String attFile = this.rootDirectory + separator + this.defaultAttributesDirectory + separator + attributesFile;
+                String projAttFile = rootDirectory + separator + defaultSamplesDirectory + separator + projectName + separator + defaultAttributesFile;
+                try {
+                    if (Files.exists(Paths.get(attFile)) && !Files.exists(Paths.get(projAttFile))) {
+                        Files.copy(Paths.get(attFile), Paths.get(projAttFile));
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        }
+    }
+
+    
+
     public void initializeDataFromDefaults() {
 
         boolean newProject = true;
         checkDirectories();
+
         if (!readProjectParametersFile()) {
             if (this.fp == null) {
                 fp = new Frame_Parameters(this);
@@ -278,11 +319,10 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         //write file partition mapping, if needed to a file
         checkPriorPartitioningScheme(this.partitionByFile);
 
-        String charFile = this.rootDirectory + separator + this.defaultCharactersDirectory + separator + defaultCharactersFile;
-        this.setCharacterList(charFile);
-
-        String attFile = this.rootDirectory + separator + this.defaultAttributesDirectory + separator + defaultAttributesFile;
-        this.setAttributesList(attFile);
+        this.setInitialCharacterList();
+        this.setInitialAttributesList();
+        setProjectCharactersFile();
+        setProjectAttributesFile();
 
         this.setImagesDirectory(this.defaultImagesDirectory, this.rootDirectory, newProject);
         setWindowSizeInformation();
@@ -1306,7 +1346,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             imageScaling = (double) newWidth / (double) image.getWidth();
 
             int newHeight = (int) ((double) image.getHeight() * imageScaling);
-            //System.out.println("The original dimensions were " + image.getWidth() + " by " + image.getHeight() + " and the new dimensions are " + newWidth + " by " + newHeight + " with image scaling " + this.imageScaling);
+            System.out.println("The original dimensions were " + image.getWidth() + " by " + image.getHeight() + " and the new dimensions are " + newWidth + " by " + newHeight + " with image scaling " + this.imageScaling);
             image = scaleImage(image, newWidth, newHeight, BufferedImage.TYPE_INT_RGB, Image.SCALE_SMOOTH);
 
             //System.out.println("The aspect ratio is (w/h)" + ((double) image.getWidth() / (double) image.getHeight()) + " and the width is " + image.getWidth());
@@ -1541,6 +1581,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }
 
     public BufferedImage scaleImage(BufferedImage orig, int width, int height, int imgType, int scaleType) {
+        //System.out.println("Scaling image to " + width + " width.");
         Image imgData = orig.getScaledInstance(width, height, scaleType);
         orig = new BufferedImage(imgData.getWidth(null), imgData.getHeight(null), imgType);
         orig.getGraphics().drawImage(imgData, 0, 0, null);
@@ -1726,6 +1767,19 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
     }
 
+    public void setInitialAttributesList() {
+        String attsFile = this.rootDirectory + separator + this.defaultAttributesDirectory + separator + defaultAttributesFile;
+        try {
+            if (Files.exists(Paths.get(rootDirectory + separator + defaultSamplesDirectory + separator + projectName + separator + defaultAttributesFile))) {
+                attsFile = rootDirectory + separator + defaultSamplesDirectory + separator + projectName + separator + defaultAttributesFile;
+            }
+        } catch (Exception e) {
+
+        }
+        setAttributesList(attsFile);
+
+    }
+
     public void setAttributesList(String attsFile) {
 
         this.attributesFile = attsFile;
@@ -1746,7 +1800,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
             }
             br.close();
-            
+
             System.out.println("There are " + this.attributesHash.size() + " attributes.");
 
             this.attributesEnabled = true;
@@ -1783,6 +1837,18 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         return attribute;
     }
 
+    public void setInitialCharacterList() {
+        String charFile = this.rootDirectory + separator + this.defaultCharactersDirectory + separator + defaultCharactersFile;
+        try {
+            if (Files.exists(Paths.get(rootDirectory + separator + defaultSamplesDirectory + separator + projectName + separator + defaultCharactersFile))) {
+                charFile = rootDirectory + separator + defaultSamplesDirectory + separator + projectName + separator + defaultCharactersFile;
+            }
+        } catch (Exception e) {
+
+        }
+        setCharacterList(charFile);
+    }
+
     public void setCharacterList(String charFile) {
         this.characterFile = charFile;
         characters = new ArrayList<String>();
@@ -1800,7 +1866,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             this.charactersEnabled = true;
             this.Button_ResetCharacters.setEnabled(true);
             checkSaveButton();
-            
+
             System.out.println("There are " + this.charactersHash.size() + " characters.");
 
         } catch (Exception e) {
@@ -1889,6 +1955,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         //height = (double) ph;
         //width = (double) pw * imageAspectRatio;
         //}
+        System.out.println("Original image width was " + iw);
         scaledImage = this.scaleImage(image, width, height, BufferedImage.TYPE_INT_RGB, Image.SCALE_SMOOTH);
 
         return (scaledImage);

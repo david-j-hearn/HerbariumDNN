@@ -69,6 +69,7 @@ public class Frame_SelectCharactersFileBrowser extends javax.swing.JFrame {
             String path = SelectCharactersFile.getSelectedFile().getAbsolutePath();
             currentDirectory = SelectCharactersFile.getCurrentDirectory().getAbsolutePath();
             f_ds.setCharacterList(path);
+            f_ds.setProjectCharactersFile();
             if (f_ds.getRootDirectory() == null) {
                 f_ds.setRootDirectory(SelectCharactersFile.getCurrentDirectory().getParentFile().getAbsolutePath());
             }

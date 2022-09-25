@@ -67,6 +67,7 @@ public class Frame_SelectAdditionalAttributeFileBrowser extends javax.swing.JFra
             String path = SelectAttributesFile.getSelectedFile().getAbsolutePath();
             currentDirectory = SelectAttributesFile.getCurrentDirectory().getAbsolutePath();
             f_ds.setAttributesList(path);
+            f_ds.setProjectAttributesFile();
             if (f_ds.getRootDirectory() == null) {
                 f_ds.setRootDirectory(SelectAttributesFile.getCurrentDirectory().getParentFile().getAbsolutePath());
             }
