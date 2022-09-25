@@ -3373,6 +3373,8 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
     boolean manualSelection = true;
 
+    //
+    
     int imageNumber;
 
     Random rng;
