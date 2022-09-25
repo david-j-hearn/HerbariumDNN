@@ -1,0 +1,2 @@
+Sample Number	User	Session ID	Timestamp	X Original	Y Original	X Scaled	Y Scaled	Scaled Image Width	Small Window	Medium Window	Large Window	State Vector	Attribute Number	Species	Image File
+1	David	Phase0	1663267248680	4446	580	0.6325263811297331	0.06380426960901894	2900	5	30	726	11000000000000000000000000000000000000000000000000	2	Passiflora_lutea	Passiflora_lutea_0230a8e9-9859-48a0-adb9-29f63a3de867.jpg

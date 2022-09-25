@@ -1,0 +1,89 @@
+from tensorflow.keras.models import Model
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import BatchNormalization
+from tensorflow.keras.layers import AveragePooling2D
+from tensorflow.keras.layers import MaxPooling2D
+from tensorflow.keras.layers import Conv2D
+from tensorflow.keras.layers import Activation
+from tensorflow.keras.layers import Dropout
+from tensorflow.keras.layers import Flatten
+from tensorflow.keras.layers import Input
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import concatenate
+from tensorflow.keras.optimizers import Adam
+from keras.utils import to_categorical
+from keras.preprocessing import image
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from tqdm import tqdm
+%matplotlib inline
+
+#handle taxonomy number, (x,y) coordinates
+modelMeta = Sequential()
+modelMeta.add(Dense(10, input_dim=3, activation="relu"))
+modelMeta.add(Dense(5, activation="relu"))
+#handle pixel image input
+
+inputsPixel= Input(shape=(1,1,3))
+pix = inputsPixel
+pix = Conv2D(filters=10, kernel_size=(1,1), padding=”same”, activation="relu",input_shape=(1,1,3))(pix)
+pix = Flatten()(pix)
+pix = Dense(16, activation="relu")(pix)
+modelPixel = Model(inputsPixel, pix)
+
+#handle local image input
+inputsLocal = Input(shape=(3,3,3))
+loc = inputsLocal
+loc = Conv2D(filters=10, kernel_size=(1,1), padding=”same”, activation="relu",input_shape=(3,3,3))(loc)
+loc = Flatten()(loc)
+loc = Dense(10, activation="relu")(loc)
+modelLocal = Model(inputsLocal, loc)
+
+#handle window image input
+inputsWindow = Input(shape=(3,3,3))
+win = inputsWindow
+win = Conv2D(filters=64, kernel_size=(3,3), padding=”same”, activation="relu",input_shape=(25,25,3))(win)
+win = Flatten()(win)
+win = Dense(10, activation="relu")( win)
+modelWindow = Model(inputsWindow, win)
+
+
+#handle overview image input
+
+inputsOverview = Input(shape=(250,250,3))
+ov = inputsOverview
+ov = Conv2D(filters=16, kernel_size=(3,3), padding=”same”, activation="relu",input_shape=(250,250,3))(ov)
+ov = Conv2D(filters=8, kernel_size=(3,3), activation="relu")(ov)
+ov = Flatten()(ov)
+ov = Dense(32, activation="relu")( ov)
+modelOverview = Model(inputsOverview, ov)
+
+combinedInput = concatenate([modelMeta.output, modelPixel.output, modelLocal.output, modelWindow.output, modelOverview.output])
+
+#create the last layers
+
+finalLayers = Dense(32, activation="relu")(combinedInput)
+finalLayers = Dense(52,  activation="relu")(finalLayers)
+
+#create the combined model that handles the mixed inputs
+combinedModel = Model(inputs=[modelMeta.input, modelPixel.input, modelLocal.input, modelWindow.input, modelOverview.input], outputs=finalLayers)
+
+combinedModel.summary()
+
+
+opt = Adam(lr=1e-3, decay=1e-3 / 200)
+combinedModel.compile(loss='binary_crossentropy', metrics=['accuracy'], optimizer=opt)
+
+#below will not work as is
+#needs functions to input taxonomic numbers, (x,y) coords, pixel images, local images, window images, and overview images
+#See file ExampleMultiLabelModel.docx for example of how to readin both the inputs and the outputs for a multi-label model
+
+combinedModel.fit(
+x=[trainMetaX, trainPixelX, trainLocalX, trainWindowX, trainOverviewX], y=trainY,
+validation_data=([ testMetaX, testPixelX, testLocalX, testWindowX, testOverviewX], testY),
+epochs=200, batch_size=8)
+
+preds = model.predict([testMetaX, testPixelX, testLocalX, testWindowX, testOverviewX])
+  

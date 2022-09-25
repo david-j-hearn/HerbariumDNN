@@ -1,0 +1,5 @@
+Passiflora_lutea_004faa78-7bd5-4998-96b9-85721ce0f2bc.jpg	Training
+Passiflora_lutea_0230a8e9-9859-48a0-adb9-29f63a3de867.jpg	Training
+Passiflora_auriculata_0b26b2dc-a495-4d4c-a4d3-a56c3cc3f30c.jpg	Training
+Passiflora_lutea_034af037-a30b-4ce5-9182-2a0297a63692.jpg	Validation
+Passiflora_auriculata_8abc61a4-5c6c-4e00-b076-d8d39e95e828.jpg	Testing

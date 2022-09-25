@@ -1,0 +1,2 @@
+Sample Number	User	Session ID	Timestamp	X Original	Y Original	X Scaled	Y Scaled	Scaled Image Width	Small Window	Medium Window	Large Window	State Vector	Attribute Number	Species	Image File
+1	David	Phase2	1663267912626	1724	2186	0.4489655172413793	0.3795402298850575	2900	5	30	726	11000000000000000000000000000000000000000000000000	1	Passiflora_auriculata	Passiflora_auriculata_8abc61a4-5c6c-4e00-b076-d8d39e95e828.jpg
