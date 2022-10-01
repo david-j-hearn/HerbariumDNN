@@ -87,8 +87,24 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         }
     }
 
+    private void getSamplingState() {
+        fastMode = this.CheckBoxMenuItem_FastMode.isSelected();
+        autoSave = this.CheckBoxMenuItem_Autosave.isSelected();
+        randomSampling = this.CheckBoxMenuItem_RandomizeSampling.isSelected();
+        resetOnSave = this.CheckBox_ResetOnSave.isSelected();
+    }
+
+    private void setSamplingState() {
+        this.CheckBoxMenuItem_Autosave.setSelected(autoSave);
+        this.CheckBoxMenuItem_FastMode.setSelected(fastMode);
+        this.CheckBoxMenuItem_RandomizeSampling.setSelected(randomSampling);
+        this.CheckBox_ResetOnSave.setSelected(resetOnSave);
+    }
+
     public void writeProjectParametersFile() {
         String defaultFile = this.rootDirectory + separator + this.defaultSamplesDirectory + separator + this.projectName + separator + projectParametersFile;
+
+        getSamplingState();
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(defaultFile));
@@ -124,6 +140,10 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             writer.write("user\t" + user + "\n");
             writer.write("imageNumber\t" + imageNumber + "\n");
             writer.write("notesFile\t" + notesFile + "\n");
+            writer.write("fastMode\t" + fastMode + "\n");
+            writer.write("autoSave\t" + autoSave + "\n");
+            writer.write("randomSampling\t" + randomSampling + "\n");
+            writer.write("resetOnSave\t" + resetOnSave + "\n");
 
             writer.close();
         } catch (IOException ex) {
@@ -199,6 +219,10 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         user = propertiesHash.get("user");
 
         partitionByFile = Boolean.parseBoolean(propertiesHash.get("partitionByFile"));
+        fastMode = Boolean.parseBoolean(propertiesHash.get("fastMode"));
+        autoSave = Boolean.parseBoolean(propertiesHash.get("autoSave"));
+        randomSampling = Boolean.parseBoolean(propertiesHash.get("randomSampling"));
+        resetOnSave = Boolean.parseBoolean(propertiesHash.get("resetOnSave"));
 
         imageNumber = Integer.parseInt(propertiesHash.get("imageNumber"));
 
@@ -220,6 +244,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         //Colors don't influence sample properties!! No need to disable!!
         //fsc.disableColorSecting();
         //text fields
+        this.CheckBoxMenuItem_FastMode.setEnabled(false);
         disableSamplingTextFields();
         disableFileSelectionMenuItems();
     }
@@ -228,6 +253,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         this.MenuItem_OpenAddedAttributeFile.setEnabled(false);
         this.MenuItem_OpenCharactersFile.setEnabled(false);
         this.MenuItem_OpenImagesDirectory.setEnabled(false);
+
     }
 
     private void disableSamplingTextFields() {
@@ -267,8 +293,6 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             }
         }
     }
-
-    
 
     public void initializeDataFromDefaults() {
 
@@ -315,6 +339,8 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         } else {
             newProject = false;
         }
+
+        this.setSamplingState();
 
         //write file partition mapping, if needed to a file
         checkPriorPartitioningScheme(this.partitionByFile);
@@ -619,6 +645,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             CheckBoxMenuItem_Autosave = new javax.swing.JCheckBoxMenuItem();
             CheckBoxMenuItem_RandomizeSampling = new javax.swing.JCheckBoxMenuItem();
             MenuItem_Delete = new javax.swing.JMenuItem();
+            CheckBoxMenuItem_FastMode = new javax.swing.JCheckBoxMenuItem();
             Menu_Log = new javax.swing.JMenu();
             MenuItem_Notes = new javax.swing.JMenuItem();
             Menu_Help = new javax.swing.JMenu();
@@ -945,6 +972,11 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
             CheckBoxMenuItem_Autosave.setText("Autosave");
             CheckBoxMenuItem_Autosave.setEnabled(false);
+            CheckBoxMenuItem_Autosave.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    CheckBoxMenuItem_AutosaveItemStateChanged(evt);
+                }
+            });
             Menu_Sampling.add(CheckBoxMenuItem_Autosave);
 
             CheckBoxMenuItem_RandomizeSampling.setText("Randomize Sampling");
@@ -952,6 +984,11 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             CheckBoxMenuItem_RandomizeSampling.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent evt) {
                     CheckBoxMenuItem_RandomizeSamplingItemStateChanged(evt);
+                }
+            });
+            CheckBoxMenuItem_RandomizeSampling.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    CheckBoxMenuItem_RandomizeSamplingActionPerformed(evt);
                 }
             });
             Menu_Sampling.add(CheckBoxMenuItem_RandomizeSampling);
@@ -963,6 +1000,15 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                 }
             });
             Menu_Sampling.add(MenuItem_Delete);
+
+            CheckBoxMenuItem_FastMode.setSelected(true);
+            CheckBoxMenuItem_FastMode.setText("Fast Mode");
+            CheckBoxMenuItem_FastMode.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    CheckBoxMenuItem_FastModeItemStateChanged(evt);
+                }
+            });
+            Menu_Sampling.add(CheckBoxMenuItem_FastMode);
 
             Menu_MainMenu.add(Menu_Sampling);
 
@@ -1004,7 +1050,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                         .addComponent(ComboBox_ImageFiles, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Panel_MainImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(Label_MainImage, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                            .addComponent(Label_MainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 266, Short.MAX_VALUE)
                             .addGap(12, 12, 12)
                             .addComponent(TextField_ImageNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1171,24 +1217,47 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         this.Label_MainImage.setText(text);
     }
 
+    private void enableRandomAndAutosaveSampling() {
+
+        this.CheckBoxMenuItem_Autosave.setEnabled(true);
+        this.CheckBoxMenuItem_RandomizeSampling.setEnabled(true);
+
+    }
+
+    private void disableRandomAndAutosaveSampling() {
+
+        this.CheckBoxMenuItem_Autosave.setSelected(false);
+        this.CheckBoxMenuItem_Autosave.setEnabled(false);
+        this.CheckBoxMenuItem_RandomizeSampling.setEnabled(false);
+        this.CheckBoxMenuItem_RandomizeSampling.setSelected(false);
+        sampledXRandom = -1;
+        sampledYRandom = -1;
+    }
+
     private void checkSaveButton() {
-        if (this.imagesEnabled && this.attributesEnabled && this.charactersEnabled) {
-            if (currentSample != null) {
-                this.Button_SaveSample.setEnabled(true);
+        if (this.CheckBoxMenuItem_FastMode.isSelected()) {
+            this.Button_SaveSample.setEnabled(true);
+            disableRandomAndAutosaveSampling();
+            return;
+        }
+        if (this.CheckBoxMenuItem_Autosave.isSelected()) {
+            this.Button_SaveSample.setEnabled(true);
+            disableRandomAndAutosaveSampling();
+        } else {
+            if (this.imagesEnabled && this.attributesEnabled && this.charactersEnabled) {
+                if (currentSample != null) {
+                    this.Button_SaveSample.setEnabled(true);
+                } else {
+                    this.Button_SaveSample.setEnabled(false);
+                }
+                this.CheckBoxMenuItem_Autosave.setEnabled(true);
+                this.CheckBoxMenuItem_RandomizeSampling.setEnabled(true);
             } else {
                 this.Button_SaveSample.setEnabled(false);
+                disableRandomAndAutosaveSampling();
             }
-            this.CheckBoxMenuItem_Autosave.setEnabled(true);
-            this.CheckBoxMenuItem_RandomizeSampling.setEnabled(true);
-        } else {
-            this.Button_SaveSample.setEnabled(false);
-            this.CheckBoxMenuItem_Autosave.setSelected(false);
-            this.CheckBoxMenuItem_Autosave.setEnabled(false);
-            this.CheckBoxMenuItem_RandomizeSampling.setEnabled(false);
-            this.CheckBoxMenuItem_RandomizeSampling.setSelected(false);
-            sampledXRandom = -1;
-            sampledYRandom = -1;
         }
+        this.repaint();
     }
 
     private void printImageInfo(String imgFile) {
@@ -2162,9 +2231,14 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }
 
     private void Button_PreviousImageFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Button_PreviousImageFileMouseClicked
+
+        setPreviousImage();
+    }//GEN-LAST:event_Button_PreviousImageFileMouseClicked
+
+    private void setPreviousImage() {
         imageNumber--;
         if (imageNumber < 0) {
-            imageNumber = 0;
+            imageNumber = images.length - 1;
         }
         setFileComboBox(images[imageNumber]);
         setImageNumberTextField();
@@ -2172,17 +2246,20 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         //setFileComboBox(imageNumber);
         //System.out.println("Calling from previous button");
         setMainImage(this.rootDirectory + separator + defaultImagesDirectory + separator + images[imageNumber]);
-
-    }//GEN-LAST:event_Button_PreviousImageFileMouseClicked
+    }
 
     private void Button_NextImageFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_NextImageFileActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Button_NextImageFileActionPerformed
 
     private void Button_NextImageFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Button_NextImageFileMouseClicked
+        setNextImage();
+    }//GEN-LAST:event_Button_NextImageFileMouseClicked
+
+    private void setNextImage() {
         imageNumber++;
         if (imageNumber > images.length - 1) {
-            imageNumber = images.length - 1;
+            imageNumber = 0;
         }
 
         setFileComboBox(images[imageNumber]);
@@ -2191,8 +2268,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         //System.out.println("Calling from next button");
         setMainImage(this.rootDirectory + separator + defaultImagesDirectory + separator + images[imageNumber]);
 
-
-    }//GEN-LAST:event_Button_NextImageFileMouseClicked
+    }
 
     private void Button_RandomImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Button_RandomImageMouseClicked
         //this.Button_RandomImage.setText("loading...");
@@ -2361,8 +2437,9 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
         this.checkDirectories();
         String type;
-
-        if (this.partitionByFile) {
+        if (this.CheckBoxMenuItem_FastMode.isSelected()) {
+            return rootDirectory + separator + defaultSamplesDirectory + separator + projectName;
+        } else if (this.partitionByFile) {
             this.readAndCreateSamplePartitionMapping(true);
             type = this.filePartitionType.get(images[imageNumber]);
         } else {
@@ -2428,15 +2505,8 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         return state;
     }
 
-    //write user, projectName, timestamp, x orig, y orig, x scaled, y scaled, state vector, attribute number, species, image file
-    private void saveSample() {
+    private void onFirstSave() {
 
-        if (this.currentSample == null) {
-            return;
-        }
-
-        //disable ability to change the partitioning scheme on first save (or on any save, since it takes so little time)
-        //once the first save in a project is done, there should not be any changes to the partitioning scheme
         this.disablePartitionTypeSelection = true;
         if (fp == null) {
             fp = new Frame_Parameters(this);
@@ -2453,6 +2523,11 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         if (this.partitionByFile) {
             this.writeSamplePartitionMappingToFile();
         }
+    }
+
+    private void saveFastMode() {
+
+        onFirstSave();
 
         try {
             //to assure that the timestamp is unique for each sample, sleep for 5 milliseconds
@@ -2482,11 +2557,6 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             }
         }
 
-        boolean savedMontage = false;
-        boolean savedPixel = false;
-        boolean savedLocal = false;
-        boolean savedWindow = false;
-        boolean savedOverview = false;
         boolean savedState = false;
 
         String state = createStateString(); //includes trailing tab
@@ -2502,81 +2572,170 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             int attribute = getAttribute();
             BufferedWriter writer = new BufferedWriter(new FileWriter(sampleDataFile, true));
 
-            int trueXPrescaled = (int) ((double) this.sampledXTrue / (double) this.imageScaling);
-            int trueYPrescaled = (int) ((double) this.sampledYTrue / (double) this.imageScaling);
+            int trueXPrescaled = -1;
+            int trueYPrescaled = -1;
 
             //System.out.println("Sample point data " + imageScaling + " " + sampledXTrue + " " + sampledYTrue + " " + trueXPrescaled + " " + trueYPrescaled);
-            double x = ((double) sampledXTrue / (double) image.getWidth());
-            double y = ((double) sampledYTrue / (double) image.getHeight());
+            double x = -1.0;
+            double y = -1.0;
 
             //write user, projectName, timestamp, x orig, y orig, x scaled, y scaled, state vector, attribute number, species, image file
             String data = sampleNumber + "\t" + user + "\t" + projectName + "\t" + time + "\t" + trueXPrescaled + "\t" + trueYPrescaled + "\t" + x + "\t" + y + "\t" + defaultImageWidth + "\t" + defaultLocalSize + "\t" + defaultWindowSize + "\t" + defaultOverviewSize + "\t" + state + attribute + "\t" + currentSpecies + "\t" + images[imageNumber] + "\n";
             writer.write(data);
             writer.close();
 
-            this.insertSampledPixel(x, y);
             this.setSampleNumber();
             savedState = true;
-            this.Panel_MainImage.repaint();
 
         } catch (IOException ex) {
             //Logger.getLogger(Frame_DataSampler.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error saving sample " + sampleNumber);
+            return;
         }
 
-        try {
+        if (savedState) {
+            System.out.println("Saved fast mode sample " + sampleNumber);
+            this.setNextImage();
+        }
+        this.Panel_MainImage.repaint();
+    }
 
-            //String sampleDir = directory + separator + "sampleImages_" + sampleNumber + "." + projectName;
-            //Files.createDirectories(Paths.get(sampleDir));
-            BufferedImage pi = getSubimage(image, sampledXTrue, sampledYTrue, 1, 1);
-            BufferedImage wi = getWindowImage(sampledXTrue, sampledYTrue, false);
-            BufferedImage zoi = getZoomOutImage(sampledXTrue, sampledYTrue, true);
-            BufferedImage li = getLocalImage(sampledXTrue, sampledYTrue, false);
+    //write user, projectName, timestamp, x orig, y orig, x scaled, y scaled, state vector, attribute number, species, image file
+    private void saveSample() {
 
-            //write composited image file
-            String fileImg = directory + separator + "Montage" + separator + "montage." + sampleNumber + "." + time + "." + defaultImageFormat;
-            File outputfile = new File(fileImg);
-            BufferedImage scaledMontage = scaleMontage();
-            ImageIO.write(scaledMontage, defaultImageFormat, outputfile);
-            savedMontage = true;
-
-            //write pixel image file
-            //if (pi == null) {
-            //    System.out.println("Pi is null!" + sampledXTrue + " " + sampledYTrue);
-            //}
-            fileImg = directory + separator + "Pixel" + separator + "pixel." + sampleNumber + "." + time + "." + defaultImageFormat;
-            outputfile = new File(fileImg);
-            if (ImageIO.write(pi, defaultImageFormat, outputfile)) {
-                savedPixel = true;
+        if (this.CheckBoxMenuItem_FastMode.isSelected()) {
+            saveFastMode();
+        } else {
+            if (this.currentSample == null) {
+                return;
             }
-            //System.out.println("Saved pixel to " + fileImg);
 
-            //write local image file
-            fileImg = directory + separator + "Local" + separator + "local." + sampleNumber + "." + time + "." + defaultImageFormat;
-            outputfile = new File(fileImg);
-            ImageIO.write(li, defaultImageFormat, outputfile);
-            savedLocal = true;
+            onFirstSave();
 
-            //write window image file
-            fileImg = directory + separator + "Window" + separator + "window." + sampleNumber + "." + time + "." + defaultImageFormat;
-            outputfile = new File(fileImg);
-            ImageIO.write(wi, defaultImageFormat, outputfile);
-            savedWindow = true;
+            try {
+                //to assure that the timestamp is unique for each sample, sleep for 5 milliseconds
+                Thread.sleep(5);
+            } catch (InterruptedException ex) {
 
-            //write overview image file
-            fileImg = directory + separator + "Overview" + separator + "overview." + sampleNumber + "." + time + "." + defaultImageFormat;
-            outputfile = new File(fileImg);
-            zoi = scaleOverviewImage(zoi);
-            ImageIO.write(zoi, defaultImageFormat, outputfile);
-            savedOverview = true;
+            }
+            long time = new Date().getTime();
+            sampleNumber++;
 
-        } catch (IOException ex) {
-            Logger.getLogger(Frame_DataSampler.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
+            //String directory = this.rootDirectory + separator + defaultSamplesDirectory + separator + this.projectName;
+            String directory = this.setSaveDirectory();
 
-        if (savedState && savedMontage && savedPixel && savedLocal && savedWindow && savedOverview) {
-            System.out.println("Saved sample " + sampleNumber);
+            //System.out.println(directory);
+            //check if csv exists, and if not create it and write a header to it
+            String sampleDataFile = directory + separator + dataFile;
+            if (!Files.exists(Paths.get(sampleDataFile))) {
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(sampleDataFile));
+                    String header = createHeader();
+                    writer.write(header);
+                    writer.close();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(Frame_DataSampler.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            boolean savedMontage = false;
+            boolean savedPixel = false;
+            boolean savedLocal = false;
+            boolean savedWindow = false;
+            boolean savedOverview = false;
+            boolean savedState = false;
+
+            String state = createStateString(); //includes trailing tab
+
+            if (state == null) {
+                JOptionPane.showMessageDialog(this, "<html>No characters were selected. At least one character must be selected. Not saving...<br>If none of the categories match, create a category for 'Other'.</html>");
+                return;
+            }
+
+            try {
+
+                //open csv in append mode
+                int attribute = getAttribute();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(sampleDataFile, true));
+
+                int trueXPrescaled = (int) ((double) this.sampledXTrue / (double) this.imageScaling);
+                int trueYPrescaled = (int) ((double) this.sampledYTrue / (double) this.imageScaling);
+
+                //System.out.println("Sample point data " + imageScaling + " " + sampledXTrue + " " + sampledYTrue + " " + trueXPrescaled + " " + trueYPrescaled);
+                double x = ((double) sampledXTrue / (double) image.getWidth());
+                double y = ((double) sampledYTrue / (double) image.getHeight());
+
+                //write user, projectName, timestamp, x orig, y orig, x scaled, y scaled, state vector, attribute number, species, image file
+                String data = sampleNumber + "\t" + user + "\t" + projectName + "\t" + time + "\t" + trueXPrescaled + "\t" + trueYPrescaled + "\t" + x + "\t" + y + "\t" + defaultImageWidth + "\t" + defaultLocalSize + "\t" + defaultWindowSize + "\t" + defaultOverviewSize + "\t" + state + attribute + "\t" + currentSpecies + "\t" + images[imageNumber] + "\n";
+                writer.write(data);
+                writer.close();
+
+                this.insertSampledPixel(x, y);
+                this.setSampleNumber();
+                savedState = true;
+                this.Panel_MainImage.repaint();
+
+            } catch (IOException ex) {
+                //Logger.getLogger(Frame_DataSampler.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Error saving sample " + sampleNumber);
+            }
+
+            try {
+
+                //String sampleDir = directory + separator + "sampleImages_" + sampleNumber + "." + projectName;
+                //Files.createDirectories(Paths.get(sampleDir));
+                BufferedImage pi = getSubimage(image, sampledXTrue, sampledYTrue, 1, 1);
+                BufferedImage wi = getWindowImage(sampledXTrue, sampledYTrue, false);
+                BufferedImage zoi = getZoomOutImage(sampledXTrue, sampledYTrue, true);
+                BufferedImage li = getLocalImage(sampledXTrue, sampledYTrue, false);
+
+                //write composited image file
+                String fileImg = directory + separator + "Montage" + separator + "montage." + sampleNumber + "." + time + "." + defaultImageFormat;
+                File outputfile = new File(fileImg);
+                BufferedImage scaledMontage = scaleMontage();
+                ImageIO.write(scaledMontage, defaultImageFormat, outputfile);
+                savedMontage = true;
+
+                //write pixel image file
+                //if (pi == null) {
+                //    System.out.println("Pi is null!" + sampledXTrue + " " + sampledYTrue);
+                //}
+                fileImg = directory + separator + "Pixel" + separator + "pixel." + sampleNumber + "." + time + "." + defaultImageFormat;
+                outputfile = new File(fileImg);
+                if (ImageIO.write(pi, defaultImageFormat, outputfile)) {
+                    savedPixel = true;
+                }
+                //System.out.println("Saved pixel to " + fileImg);
+
+                //write local image file
+                fileImg = directory + separator + "Local" + separator + "local." + sampleNumber + "." + time + "." + defaultImageFormat;
+                outputfile = new File(fileImg);
+                ImageIO.write(li, defaultImageFormat, outputfile);
+                savedLocal = true;
+
+                //write window image file
+                fileImg = directory + separator + "Window" + separator + "window." + sampleNumber + "." + time + "." + defaultImageFormat;
+                outputfile = new File(fileImg);
+                ImageIO.write(wi, defaultImageFormat, outputfile);
+                savedWindow = true;
+
+                //write overview image file
+                fileImg = directory + separator + "Overview" + separator + "overview." + sampleNumber + "." + time + "." + defaultImageFormat;
+                outputfile = new File(fileImg);
+                zoi = scaleOverviewImage(zoi);
+                ImageIO.write(zoi, defaultImageFormat, outputfile);
+                savedOverview = true;
+
+            } catch (IOException ex) {
+                Logger.getLogger(Frame_DataSampler.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (savedState && savedMontage && savedPixel && savedLocal && savedWindow && savedOverview) {
+                System.out.println("Saved sample " + sampleNumber);
+            }
         }
     }
 
@@ -2628,6 +2787,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }//GEN-LAST:event_Panel_SampledImageComponentResized
 
     private void CheckBoxMenuItem_RandomizeSamplingItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CheckBoxMenuItem_RandomizeSamplingItemStateChanged
+        randomSampling = this.CheckBoxMenuItem_RandomizeSampling.isSelected();
         if (this.CheckBoxMenuItem_RandomizeSampling.isSelected()) {
             this.CheckBoxMenuItem_Autosave.setSelected(false);
             this.CheckBoxMenuItem_Autosave.setEnabled(false);
@@ -2655,9 +2815,12 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }//GEN-LAST:event_CheckBoxMenuItem_RandomizeSamplingItemStateChanged
 
     private void Button_RandomPixelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Button_RandomPixelMouseClicked
-        this.selectedXMiddle = -1;
-        this.selectedYMiddle = -1;
-        this.randomlySelectPixel();
+
+        if (this.Button_RandomPixel.isEnabled()) {
+            this.selectedXMiddle = -1;
+            this.selectedYMiddle = -1;
+            this.randomlySelectPixel();
+        }
     }//GEN-LAST:event_Button_RandomPixelMouseClicked
 
     private void MenuItem_ImageInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_ImageInformationActionPerformed
@@ -2872,6 +3035,29 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         notes.setVisible(true);
     }//GEN-LAST:event_MenuItem_NotesActionPerformed
 
+    private void CheckBoxMenuItem_FastModeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CheckBoxMenuItem_FastModeItemStateChanged
+        fastMode = this.CheckBoxMenuItem_FastMode.isSelected();
+        if (fastMode) {
+            this.CheckBox_ResetOnSave.setSelected(false);
+            this.CheckBox_ResetOnSave.setEnabled(false);
+            this.disableRandomAndAutosaveSampling();
+        } else {
+            this.CheckBox_ResetOnSave.setEnabled(true);
+            this.enableRandomAndAutosaveSampling();
+        }
+
+        checkSaveButton();
+    }//GEN-LAST:event_CheckBoxMenuItem_FastModeItemStateChanged
+
+    private void CheckBoxMenuItem_AutosaveItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CheckBoxMenuItem_AutosaveItemStateChanged
+        autoSave = this.CheckBoxMenuItem_Autosave.isSelected();
+        checkSaveButton();
+    }//GEN-LAST:event_CheckBoxMenuItem_AutosaveItemStateChanged
+
+    private void CheckBoxMenuItem_RandomizeSamplingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckBoxMenuItem_RandomizeSamplingActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CheckBoxMenuItem_RandomizeSamplingActionPerformed
+
     private void classifyPixels(boolean replaceImage) {
         if (image == null) {
             return;
@@ -2987,6 +3173,35 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                 //System.out.println("No metadata file yet.");
             }
         }
+
+        //Check fastmode points
+        String sampleDataFile = directory + separator + dataFile; //not user settable
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(sampleDataFile));
+            String line = reader.readLine(); // skip the header
+            line = reader.readLine();
+            while (line != null) {
+                String[] data = line.split("\\t", 0);
+                //if (data.length == 16) {
+                String file = data[data.length - 1]; //assumes filename is the last column
+                ArrayList<Point2D.Double> pts = sampledPoints.get(file);
+                if (pts == null) {
+                    pts = new ArrayList<Point2D.Double>();
+                }
+                double x = 0.0; //hardcoded = dangerous!
+                double y = 0.0; //hardcoded = dangerous!
+                pts.add(new Point2D.Double(x, y));
+                sampledPoints.put(file, pts);
+                totPts++;
+                //}
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (IOException e) {
+            //System.out.println("No metadata file yet.");
+        }
+
         return totPts;
     }
 
@@ -3271,8 +3486,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     public BufferedImage zoomImage;
     public BufferedImage currentSample;
 
-    //int defaultImageWidth = 2900;
-    int defaultImageWidth = 3000;
+    int defaultImageWidth = 700;
 
     String separator = File.separator;
     public int sampleNumber = 0;
@@ -3373,8 +3587,12 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
     boolean manualSelection = true;
 
+    boolean fastMode = false;
+    boolean autoSave = false;
+    boolean randomSampling = false;
+    boolean resetOnSave = true;
+
     //
-    
     int imageNumber;
 
     Random rng;
@@ -3387,6 +3605,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     private javax.swing.JButton Button_ResetCharacters;
     private javax.swing.JButton Button_SaveSample;
     private javax.swing.JCheckBoxMenuItem CheckBoxMenuItem_Autosave;
+    private javax.swing.JCheckBoxMenuItem CheckBoxMenuItem_FastMode;
     private javax.swing.JCheckBoxMenuItem CheckBoxMenuItem_RandomizeSampling;
     private javax.swing.JCheckBox CheckBox_ResetOnSave;
     private javax.swing.JComboBox<String> ComboBox_AddedAttributeList;
