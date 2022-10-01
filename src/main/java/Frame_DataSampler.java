@@ -2464,6 +2464,9 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
     private String createStateString() {
         resetCharacterHash();
+        if(this.headerHash == null) {
+            String header = createHeader();
+        }
 //extract character states
         boolean stateSelected = false;
         String state = new String();
