@@ -364,6 +364,17 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
         if (newProject) {
             this.setInitialNotes();
+        } else {
+            this.readNotesFromFile();
+        }
+    }
+
+    private void readNotesFromFile() {
+        String file = rootDirectory + separator + defaultSamplesDirectory + separator + projectName + separator + notesFile;
+        try {
+            this.notes = Files.readString(Paths.get(file));
+        } catch (IOException ex) {
+            System.out.println("Could not read notes from file " + file);
         }
     }
 
@@ -416,14 +427,10 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             notes += "\nSession notes ended " + strDate + "\n";
         }
 
-        try {
-            Files.writeString(Paths.get(file), notes);
-        } catch (IOException ex) {
-            System.out.println("Could not write notes to file " + file);
-        }
+        writeNotesToFile(notes);
     }
 
-    public void setNotes(String notesI) {
+    public void writeNotesToFile(String notesI) {
         String file = rootDirectory + separator + defaultSamplesDirectory + separator + projectName + separator + notesFile;
         try {
             Files.writeString(Paths.get(file), notesI);
@@ -1385,8 +1392,8 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             this.MenuItem_ImageInformation.setEnabled(true);
             File f = new File(imgFile);
             image = ImageIO.read(f);
-            
-            if(image == null) {
+
+            if (image == null) {
                 JOptionPane.showMessageDialog(this, "It looks like " + imgFile + " is empty. Going to next image.");
                 this.imageNumber++;
                 if (imageNumber >= images.length) {
@@ -2036,7 +2043,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         //height = (double) ph;
         //width = (double) pw * imageAspectRatio;
         //}
-        System.out.println("Original image width was " + iw);
+        //System.out.println("Original image width was " + iw);
         scaledImage = this.scaleImage(image, width, height, BufferedImage.TYPE_INT_RGB, Image.SCALE_SMOOTH);
 
         return (scaledImage);
@@ -2476,7 +2483,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
     private String createStateString() {
         resetCharacterHash();
-        if(this.headerHash == null) {
+        if (this.headerHash == null) {
             String header = createHeader();
         }
 //extract character states
@@ -2529,6 +2536,9 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         if (fsc == null) {
             fsc = new Frame_SelectionColors(this);
         }
+        if(fnt==null) {
+            fnt = new Frame_NoteTaker(this);
+        }
 
         //set paramter fields to be uneditable for this project (should be done on first save)
         disableParameterEditing();
@@ -2565,6 +2575,8 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                 String header = createHeader();
                 writer.write(header);
                 writer.close();
+
+                JOptionPane.showMessageDialog(this, "Creating data file " + sampleDataFile);
 
             } catch (IOException ex) {
                 Logger.getLogger(Frame_DataSampler.class
@@ -2610,6 +2622,11 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
         if (savedState) {
             System.out.println("Saved fast mode sample " + sampleNumber);
+            this.notes = this.notes + "\nSaved fast mode sample " + sampleNumber + " for file " + images[imageNumber] + " with state " + state + " at time " + time + "\n";
+            if (fnt != null) {
+                fnt.updateNotes();
+                //fnt.repaint();
+            }
             this.setNextImage();
         }
         this.Panel_MainImage.repaint();
@@ -2620,6 +2637,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
         if (this.CheckBoxMenuItem_FastMode.isSelected()) {
             saveFastMode();
+            return;
         } else {
             if (this.currentSample == null) {
                 return;
@@ -2648,6 +2666,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                     String header = createHeader();
                     writer.write(header);
                     writer.close();
+                    JOptionPane.showMessageDialog(this, "Creating data file " + sampleDataFile);
 
                 } catch (IOException ex) {
                     Logger.getLogger(Frame_DataSampler.class
@@ -2750,6 +2769,10 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
             if (savedState && savedMontage && savedPixel && savedLocal && savedWindow && savedOverview) {
                 System.out.println("Saved sample " + sampleNumber);
+                this.notes = this.notes + "\nSaved sample " + sampleNumber + " for file " + images[imageNumber] + "at time " + time + "\n";
+                if (fnt != null) {
+                    fnt.updateNotes();
+                }
             }
         }
     }
@@ -3046,8 +3069,11 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }//GEN-LAST:event_Panel_ZoomImageMouseWheelMoved
 
     private void MenuItem_NotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_NotesActionPerformed
-        Frame_NoteTaker notes = new Frame_NoteTaker(this);
-        notes.setVisible(true);
+        if (fnt == null) {
+            fnt = new Frame_NoteTaker(this);
+        }
+        fnt.setVisible(true);
+        fnt.setAlwaysOnTop(true);
     }//GEN-LAST:event_MenuItem_NotesActionPerformed
 
     private void CheckBoxMenuItem_FastModeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CheckBoxMenuItem_FastModeItemStateChanged
@@ -3544,6 +3570,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     private Frame_Parameters fp;
     private Frame_SelectionColors fsc;
     private Frame_Delete fd;
+    private Frame_NoteTaker fnt;
 
     public Dialog_ImageInformation dii;
 

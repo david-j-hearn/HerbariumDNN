@@ -33,6 +33,7 @@ public class Frame_NoteTaker extends javax.swing.JFrame {
         Label_Notes = new javax.swing.JLabel();
         ScrollPane_TextArea = new javax.swing.JScrollPane();
         TextArea_Notes = new javax.swing.JTextArea();
+        Button_SaveAndExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,6 +58,13 @@ public class Frame_NoteTaker extends javax.swing.JFrame {
         TextArea_Notes.setRows(5);
         ScrollPane_TextArea.setViewportView(TextArea_Notes);
 
+        Button_SaveAndExit.setText("Save and Exit");
+        Button_SaveAndExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Button_SaveAndExitActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -64,14 +72,14 @@ public class Frame_NoteTaker extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(Label_Notes)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Label_Notes)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Button_Save)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Button_Cancel)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(Button_SaveAndExit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Button_Cancel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(ScrollPane_TextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -79,12 +87,18 @@ public class Frame_NoteTaker extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(Label_Notes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ScrollPane_TextArea, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Button_Save)
-                    .addComponent(Button_Cancel))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(ScrollPane_TextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Button_Save)
+                            .addComponent(Button_Cancel))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Button_SaveAndExit)
+                        .addContainerGap())))
         );
 
         pack();
@@ -93,16 +107,26 @@ public class Frame_NoteTaker extends javax.swing.JFrame {
     private void Button_SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_SaveActionPerformed
 
         fds.notes = this.TextArea_Notes.getText();
-        fds.setNotes(fds.notes);
-        this.setVisible(false);
-        this.dispose();
+        fds.writeNotesToFile(fds.notes);
+        //this.setVisible(false);
+        //this.dispose();
 
     }//GEN-LAST:event_Button_SaveActionPerformed
 
+    public void updateNotes() {
+       this.TextArea_Notes.setText(fds.notes);
+    }
+    
     private void Button_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_CancelActionPerformed
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_Button_CancelActionPerformed
+
+    private void Button_SaveAndExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_SaveAndExitActionPerformed
+       fds.notes = this.TextArea_Notes.getText();
+        fds.writeNotesToFile(fds.notes);
+        this.setVisible(false);
+    }//GEN-LAST:event_Button_SaveAndExitActionPerformed
 
     Frame_DataSampler fds;
     String notes;
@@ -110,6 +134,7 @@ public class Frame_NoteTaker extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Button_Cancel;
     private javax.swing.JButton Button_Save;
+    private javax.swing.JButton Button_SaveAndExit;
     private javax.swing.JLabel Label_Notes;
     private javax.swing.JScrollPane ScrollPane_TextArea;
     private javax.swing.JTextArea TextArea_Notes;
