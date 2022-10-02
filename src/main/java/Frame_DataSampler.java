@@ -1385,6 +1385,16 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             this.MenuItem_ImageInformation.setEnabled(true);
             File f = new File(imgFile);
             image = ImageIO.read(f);
+            
+            if(image == null) {
+                JOptionPane.showMessageDialog(this, "It looks like " + imgFile + " is empty. Going to next image.");
+                this.imageNumber++;
+                if (imageNumber >= images.length) {
+                    imageNumber = 0;
+                }
+                setMainImage(imageNumber);
+                return;
+            }
 
             if (image.getWidth() / image.getHeight() > 1) {
                 JOptionPane.showMessageDialog(this, "It looks like " + imgFile + " is not an herbarium specimen. Image height should be larger than width. Going to next image.");
@@ -1393,6 +1403,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                     imageNumber = 0;
                 }
                 setMainImage(imageNumber);
+                return;
             }
 
             if (image.getWidth() < this.defaultImageWidth) {
@@ -1402,6 +1413,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                     imageNumber = 0;
                 }
                 setMainImage(imageNumber);
+                return;
             }
 
             int newWidth = this.defaultImageWidth;
