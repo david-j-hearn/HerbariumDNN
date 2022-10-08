@@ -367,6 +367,82 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         } else {
             this.readNotesFromFile();
         }
+
+        if (this.CheckBoxMenuItem_FastMode.isSelected()) {
+            setImageStateHash();
+        }
+    }
+
+    private int getNumberOfCharacters() {
+        if (headerHash == null) {
+            setHeaderHash();
+        }
+        return headerHash.size();
+    }
+
+    private void setHeaderHash() {
+        if (charactersHash == null) {
+            JOptionPane.showMessageDialog(this, "Illegally reached 'setHeaderHash' when the characters are null");
+            System.exit(0);
+        }
+        if (charactersHash.size() <= 0) {
+            JOptionPane.showMessageDialog(this, "Illegally reached 'setHeaderHash' with no characters");
+            System.exit(0);
+        }
+
+        headerHash = new Hashtable<Integer, String>();
+
+        int cnt = 0;
+        //make the characters ordered in the data sheet
+        TreeMap charTreeMap = new TreeMap<String, Boolean>(charactersHash);
+        Set<String> keys = charTreeMap.keySet();
+        for (String character : keys) {
+
+            headerHash.put(cnt, character);
+            cnt++;
+
+        }
+    }
+
+    private void setImageStateHash() {
+        if (this.CheckBoxMenuItem_FastMode.isSelected()) {
+            if (this.imageStateHash == null) {
+                this.imageStateHash = new Hashtable<String, String>(5000);
+            }
+
+            String directory = rootDirectory + separator + defaultSamplesDirectory + separator + this.projectName;
+            BufferedReader reader;
+
+            //Check fastmode points
+            String sampleDataFile = directory + separator + dataFile; //not user settable
+            setHeaderHash();
+            int numChars = getNumberOfCharacters();
+
+            try {
+                reader = new BufferedReader(new FileReader(sampleDataFile));
+                String line = reader.readLine();
+                line = reader.readLine();
+                while (line != null) {
+                    String[] data = line.split("\\t", 0);
+                    String imageFile = data[data.length - 1];
+                    String imageCharacters = new String();
+                    for (int i = 12; i < 12 + numChars; i++) {
+                        if (data[i].equals((String) "1")) {
+                            imageCharacters += " " + headerHash.get(i - 12);
+                        }
+                    }
+
+                    imageStateHash.put(imageFile, imageCharacters);
+                    line = reader.readLine();
+
+                }
+                reader.close();
+            } catch (IOException e) {
+                return;
+                //System.out.println("No metadata file yet.");
+            }
+            System.out.println("Done setting image state hash");
+        }
     }
 
     private void readNotesFromFile() {
@@ -587,6 +663,10 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                         g.drawRect(selectedXMiddle, selectedYMiddle, 1, 1);
                     }
                 }
+
+                if (imageStateHash != null) {
+                    setImageState(g);
+                }
             }
 
         };
@@ -638,6 +718,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             TextField_ImageNumber = new javax.swing.JTextField();
             Label_SampleNumber = new javax.swing.JLabel();
             CheckBox_ResetOnSave = new javax.swing.JCheckBox();
+            CheckBox_MutuallyExclusive = new javax.swing.JCheckBox();
             Menu_MainMenu = new javax.swing.JMenuBar();
             Menu_File = new javax.swing.JMenu();
             MenuItem_OpenCharactersFile = new javax.swing.JMenuItem();
@@ -666,7 +747,39 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             Table_CharacterChecklist.setModel(new javax.swing.table.DefaultTableModel(
                 table,
                 title
-            ));
+            )
+            /*{
+                public void setValueAt(Object value, int row, int col) {
+
+                    System.out.println("Hello from setValueAt");
+                    super.setValueAt(value, row, col);
+
+                    if(CheckBox_MutuallyExclusive.isSelected()) {
+
+                        System.out.println("Mutually exclusive at row " + row);
+
+                        int numChar = Table_CharacterChecklist.getModel().getRowCount();
+                        for (int i = 0; i <= numChar - 1; i++) {
+                            if(i != row) {
+                                Table_CharacterChecklist.getModel().setValueAt(false,i, 2);
+
+                            }
+                        }
+                    }
+                    //           if (((Boolean) this.Table_CharacterChecklist.getModel().getValueAt(i, 2)))
+                }
+
+            }*/);
+            Table_CharacterChecklist.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    Table_CharacterChecklistMouseClicked(evt);
+                }
+            });
+            Table_CharacterChecklist.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+                public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                    Table_CharacterChecklistPropertyChange(evt);
+                }
+            });
             Panel_CharacterCheckList.setViewportView(Table_CharacterChecklist);
 
             Button_SaveSample.setText("Save Selection");
@@ -675,6 +788,11 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             Button_SaveSample.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     Button_SaveSampleMouseClicked(evt);
+                }
+            });
+            Button_SaveSample.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    Button_SaveSampleActionPerformed(evt);
                 }
             });
 
@@ -757,7 +875,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             );
             Panel_ZoomImageLayout.setVerticalGroup(
                 Panel_ZoomImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 215, Short.MAX_VALUE)
             );
 
             Panel_SampledImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -775,7 +893,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             );
             Panel_SampledImageLayout.setVerticalGroup(
                 Panel_SampledImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 215, Short.MAX_VALUE)
             );
 
             Label_WindowSize.setText("Medium");
@@ -891,6 +1009,9 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
             CheckBox_ResetOnSave.setSelected(true);
             CheckBox_ResetOnSave.setText("Reset on save");
+
+            CheckBox_MutuallyExclusive.setSelected(true);
+            CheckBox_MutuallyExclusive.setText("Mutually Exclusive Characters");
 
             Menu_File.setText("File");
 
@@ -1053,7 +1174,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                             .addComponent(Button_NextImageFile)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(Button_RandomImage)
-                            .addGap(0, 0, Short.MAX_VALUE))
+                            .addGap(0, 15, Short.MAX_VALUE))
                         .addComponent(ComboBox_ImageFiles, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Panel_MainImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
@@ -1089,7 +1210,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(TextField_OverviewSize, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGap(0, 0, Short.MAX_VALUE)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(Panel_ZoomImage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1097,26 +1218,31 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addGap(6, 6, 6)
                                     .addComponent(Label_ClickZoomedImage)
-                                    .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addGap(0, 13, Short.MAX_VALUE)))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(Panel_CharacterCheckList, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(Label_AddedAttribute)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(ComboBox_AddedAttributeList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(CheckBox_ResetOnSave)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(Button_ResetCharacters)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                            .addComponent(Label_SampleNumber))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(Button_SaveSample)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(Button_RandomPixel)
-                            .addGap(0, 0, Short.MAX_VALUE)))
-                    .addContainerGap())
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(Label_AddedAttribute)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(ComboBox_AddedAttributeList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(CheckBox_ResetOnSave)
+                                            .addGap(25, 25, 25)
+                                            .addComponent(Button_ResetCharacters)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(Button_SaveSample))
+                                        .addComponent(CheckBox_MutuallyExclusive)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(Label_SampleNumber)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(Button_RandomPixel)))
+                                    .addGap(0, 0, Short.MAX_VALUE)))
+                            .addContainerGap())
+                        .addComponent(Panel_CharacterCheckList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
             );
             layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1137,9 +1263,9 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                             .addComponent(TextField_LocalSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(TextField_OverviewSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Button_SaveSample)
                             .addComponent(Button_RandomPixel)
-                            .addComponent(TextField_WindowSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(TextField_WindowSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Label_SampleNumber)))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1147,21 +1273,24 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                             .addComponent(Label_MainImage)
                             .addComponent(Slider_Zoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TextField_ZoomFactor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TextField_ImageNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Label_SampleNumber))
+                            .addComponent(TextField_ImageNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(CheckBox_ResetOnSave)
-                            .addComponent(Button_ResetCharacters)))
+                            .addComponent(Button_ResetCharacters)
+                            .addComponent(Button_SaveSample)))
                     .addGap(9, 9, 9)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(Panel_CharacterCheckList, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(Panel_ZoomImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(Label_ClickZoomedImage)
                             .addGap(12, 12, 12)
                             .addComponent(Panel_SampledImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(Panel_MainImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(Panel_MainImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(Panel_CharacterCheckList)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(CheckBox_MutuallyExclusive)))
                     .addContainerGap())
             );
 
@@ -1454,6 +1583,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             //System.out.println("Done");
             this.imageFile = imgFile;
             this.setAttributeFromFilename();
+
         } catch (IOException e) {
             Dialog_FileNotFound d_fnf = new Dialog_FileNotFound(this, true, imgFile);
             d_fnf.setVisible(true);
@@ -1471,6 +1601,23 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         this.repaint();
 
     }
+
+    private void setImageState(Graphics g) {
+        if (imageStateHash != null) {
+            String state = this.imageStateHash.get(images[imageNumber]);
+            if (state == null) {
+                return;
+            }
+            
+            g.setColor(new Color(255, 0, 0));
+            g.drawString(state, 20, 20);
+        }
+        else {
+            System.out.println("Could not set image state due to null imageStateHash");
+        }
+    }
+
+    
 
     private void resetVariables(boolean deleteClassification, String from) {
         //System.out.println("Resetting variables from " + from);
@@ -2489,6 +2636,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 //extract character states
         boolean stateSelected = false;
         String state = new String();
+        String imageState = new String();
         int numChar = this.Table_CharacterChecklist.getModel().getRowCount();
         for (int i = 0; i <= numChar - 1; i++) {
             if (((Boolean) this.Table_CharacterChecklist.getModel().getValueAt(i, 2))) {
@@ -2517,12 +2665,17 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         for (int i = 0; i < headerHash.size(); i++) {
             if (this.charactersHash.get(headerHash.get(i))) {
                 state += "1\t";
+                imageState += " " + headerHash.get(i);
             } else {
                 state += "0\t";
             }
         }
         if (!stateSelected) {
             return null;
+        }
+
+        if (imageStateHash != null) {
+            imageStateHash.put(images[imageNumber], imageState);
         }
         return state;
     }
@@ -2536,7 +2689,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         if (fsc == null) {
             fsc = new Frame_SelectionColors(this);
         }
-        if(fnt==null) {
+        if (fnt == null) {
             fnt = new Frame_NoteTaker(this);
         }
 
@@ -3082,12 +3235,14 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             this.CheckBox_ResetOnSave.setSelected(false);
             this.CheckBox_ResetOnSave.setEnabled(false);
             this.disableRandomAndAutosaveSampling();
+            setImageStateHash();
         } else {
             this.CheckBox_ResetOnSave.setEnabled(true);
             this.enableRandomAndAutosaveSampling();
         }
 
         checkSaveButton();
+
     }//GEN-LAST:event_CheckBoxMenuItem_FastModeItemStateChanged
 
     private void CheckBoxMenuItem_AutosaveItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CheckBoxMenuItem_AutosaveItemStateChanged
@@ -3098,6 +3253,27 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     private void CheckBoxMenuItem_RandomizeSamplingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckBoxMenuItem_RandomizeSamplingActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_CheckBoxMenuItem_RandomizeSamplingActionPerformed
+
+    private void Table_CharacterChecklistPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_Table_CharacterChecklistPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Table_CharacterChecklistPropertyChange
+
+    private void Table_CharacterChecklistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Table_CharacterChecklistMouseClicked
+        if (this.CheckBox_MutuallyExclusive.isSelected()) {
+            int row = Table_CharacterChecklist.rowAtPoint(evt.getPoint());
+            int numChar = this.Table_CharacterChecklist.getModel().getRowCount();
+
+            for (int i = 0; i <= numChar - 1; i++) {
+                if (i != row) {
+                    this.Table_CharacterChecklist.setValueAt(false, i, 2);
+                }
+            }
+        }
+    }//GEN-LAST:event_Table_CharacterChecklistMouseClicked
+
+    private void Button_SaveSampleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_SaveSampleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Button_SaveSampleActionPerformed
 
     private void classifyPixels(boolean replaceImage) {
         if (image == null) {
@@ -3613,6 +3789,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     Hashtable<String, String> propertiesHash;
     Hashtable<String, String> filePartitionType;
     Hashtable<Integer, String> headerHash;
+    Hashtable<String, String> imageStateHash;
 
     String[] images;
     Hashtable<Integer, ArrayList<Integer>> classification;
@@ -3649,6 +3826,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem CheckBoxMenuItem_Autosave;
     private javax.swing.JCheckBoxMenuItem CheckBoxMenuItem_FastMode;
     private javax.swing.JCheckBoxMenuItem CheckBoxMenuItem_RandomizeSampling;
+    private javax.swing.JCheckBox CheckBox_MutuallyExclusive;
     private javax.swing.JCheckBox CheckBox_ResetOnSave;
     private javax.swing.JComboBox<String> ComboBox_AddedAttributeList;
     private javax.swing.JComboBox<String> ComboBox_ImageFiles;

@@ -182,7 +182,7 @@
                       <Component id="Button_NextImageFile" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="Button_RandomImage" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="15" max="32767" attributes="0"/>
                   </Group>
                   <Component id="ComboBox_ImageFiles" alignment="1" max="32767" attributes="0"/>
                   <Component id="Panel_MainImage" alignment="1" max="32767" attributes="0"/>
@@ -230,7 +230,7 @@
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="48" max="32767" attributes="0"/>
+                      <EmptySpace pref="45" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
@@ -239,34 +239,43 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                               <Component id="Label_ClickZoomedImage" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="13" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="Panel_CharacterCheckList" pref="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="Label_AddedAttribute" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="Label_AddedAttribute" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="ComboBox_AddedAttributeList" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="CheckBox_ResetOnSave" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                                      <Component id="Button_ResetCharacters" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="Button_SaveSample" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="CheckBox_MutuallyExclusive" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="Label_SampleNumber" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="Button_RandomPixel" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="ComboBox_AddedAttributeList" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="CheckBox_ResetOnSave" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="Button_ResetCharacters" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="27" max="32767" attributes="0"/>
-                      <Component id="Label_SampleNumber" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="Button_SaveSample" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="Button_RandomPixel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="Panel_CharacterCheckList" alignment="1" pref="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -291,9 +300,9 @@
                   </Group>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="TextField_OverviewSize" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="Button_SaveSample" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="Button_RandomPixel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="TextField_WindowSize" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="Label_SampleNumber" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -304,16 +313,15 @@
                       <Component id="Slider_Zoom" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="TextField_ZoomFactor" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="TextField_ImageNumber" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="Label_SampleNumber" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                       <Component id="CheckBox_ResetOnSave" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="Button_ResetCharacters" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="Button_SaveSample" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="Panel_CharacterCheckList" pref="518" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="Panel_ZoomImage" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
@@ -322,6 +330,11 @@
                       <Component id="Panel_SampledImage" max="32767" attributes="0"/>
                   </Group>
                   <Component id="Panel_MainImage" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="Panel_CharacterCheckList" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="CheckBox_MutuallyExclusive" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -339,36 +352,19 @@
         <Component class="javax.swing.JTable" name="Table_CharacterChecklist">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    table,&#xa;    title&#xa;)" type="code"/>
+              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    table,&#xa;    title&#xa;) &#xa;/*{ &#xa;public void setValueAt(Object value, int row, int col) {&#xa;&#xa;    System.out.println(&quot;Hello from setValueAt&quot;);&#xa;    super.setValueAt(value, row, col);&#xa;&#xa;    if(CheckBox_MutuallyExclusive.isSelected()) {&#xa;&#xa;    System.out.println(&quot;Mutually exclusive at row &quot; + row);&#xa;&#xa;    int numChar = Table_CharacterChecklist.getModel().getRowCount();&#xa;        for (int i = 0; i &lt;= numChar - 1; i++) {&#xa;        if(i != row) {&#xa;        Table_CharacterChecklist.getModel().setValueAt(false,i, 2);&#xa;        &#xa;}&#xa;}&#xa;}&#xa; //           if (((Boolean) this.Table_CharacterChecklist.getModel().getValueAt(i, 2))) &#xa;}&#xa;    &#xa;}*/" type="code"/>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-              <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-              </TableColumnModel>
+              <TableColumnModel selectionModel="0"/>
             </Property>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Table_CharacterChecklistMouseClicked"/>
+            <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="Table_CharacterChecklistPropertyChange"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable() {&#xa;&#xa;    private static final long serialVersionUID = 1L;&#xa;&#xa;    /*@Override&#xa;    public Class getColumnClass(int column) {&#xa;        return getValueAt(0, column).getClass();&#xa;    }*/&#xa;&#xa;    @Override&#xa;    public boolean isCellEditable(int row, int column) {&#xa;        if(column==2) return true;&#xa;        return false;&#xa;    };&#xa;&#xa;    @Override&#xa;    public Class getColumnClass(int column) {&#xa;        switch (column) {&#xa;            case 0:&#xa;            return String.class;&#xa;            case 1:&#xa;            return Integer.class;&#xa;            default:&#xa;            return Boolean.class;&#xa;        }&#xa;    }&#xa;}"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="/*&#xa;Make sure command line argument is the text file with the list of items.&#xa;Open that file first and get list of items&#xa;Then set up JTable with the list of items and a checkbox for each item&#xa;&#xa;&#xa;*/"/>
@@ -384,6 +380,7 @@
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Button_SaveSampleMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Button_SaveSampleActionPerformed"/>
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="Button_SaveSample.setEnabled(false);"/>
@@ -429,7 +426,7 @@
         <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Panel_MainImageMousePressed"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value=" new javax.swing.JPanel(){&#xa;&#xa;    @Override&#xa;    public void paintComponent(Graphics g) {&#xa;        super.paintComponent(g);&#xa;        if(image!=null) {&#xa;&#xa;            if(this.getWidth() != mainPanelW || this.getHeight() != mainPanelH) {&#xa;                scaledImage = getScaledImage(image);&#xa;            }&#xa;            if(scaledImage==null) { scaledImage = getScaledImage(image); }&#xa;            if(scaledImage!=null) {&#xa;                if(scaledImage.getWidth()!=scaledImageW || scaledImage.getHeight()!=scaledImageH) {&#xa;                    scaledImage = getScaledImage(image);&#xa;                }&#xa;            }&#xa;            scaledImageW = scaledImage.getWidth();&#xa;            scaledImageH = scaledImage.getHeight();&#xa;            mainPanelW = this.getWidth();&#xa;            mainPanelH = this.getHeight();&#xa;&#xa;            g.drawImage(scaledImage, 0, 0, this);&#xa;&#xa;            ArrayList&lt;Point2D.Double&gt; pts = sampledPoints.get(images[imageNumber]);&#xa;&#xa;            if (pts != null) {&#xa;                int sN = pts.size();&#xa;                g.setColor(sampledPointsColor);&#xa;                for(Point2D.Double point : pts) {&#xa;                    int x = (int)((double)scaledImageW * point.x);&#xa;                    int y = (int)((double)scaledImageH * point.y);&#xa;                    g.drawRect(x, y, 1, 1);&#xa;&#xa;                }&#xa;                Label_MainImage.setText(&quot;Main Image (Click to set zoomed image). Samples: &quot; + sN);&#xa;            }&#xa;            //System.out.println(&quot;There are &quot; + sN + &quot; points already sampled from &quot; + images[imageNumber]);&#xa;&#xa;            if(sampledXRandom &gt;=0 &amp;&amp; sampledYRandom &gt;= 0 &amp;&amp; CheckBoxMenuItem_RandomizeSampling.isSelected()) {&#xa;&#xa;                double zoom = checkZoom();&#xa;                showW = (int) (((double) Panel_ZoomImage.getWidth() * (double) scaledImage.getWidth() / (double) image.getWidth()) / zoom);&#xa;                showH = (int) (((double) Panel_ZoomImage.getHeight() * (double) scaledImage.getHeight() / (double) image.getHeight()) / zoom);&#xa;&#xa;                int wS = scaledImage.getWidth();&#xa;                int hS = scaledImage.getHeight();&#xa;&#xa;                int w = image.getWidth();&#xa;                int h = image.getHeight();&#xa;&#xa;                int sampledXRandomScaled = (int)((double)sampledXRandom * (double)wS/(double)w);&#xa;                int sampledYRandomScaled = (int)((double)sampledYRandom * (double)hS/(double)h);&#xa;&#xa;                //int rectSize = (int)(0.0025 * (double)w);&#xa;                //if(rectSize == 0 ) rectSize = 5;&#xa;                //int rectX = sampledXRandomScaled - rectSize/2;&#xa;                //int rectY = sampledYRandomScaled - rectSize/2;&#xa;&#xa;                int rectX = sampledXRandomScaled - showW/2;&#xa;                int rectY = sampledYRandomScaled - showH/2;&#xa;                if(rectX &lt; 0) rectX =0;&#xa;                if(rectY &lt; 0) rectY = 0;&#xa;                if(rectX+showW&gt;=wS) rectX=wS-showW;&#xa;                if(rectY+showH&gt;=hS) rectY=hS-showH;&#xa;                g.setColor(rectangleRandomColor);&#xa;                g.drawRect(rectX, rectY, showW, showH);&#xa;                g.setColor(pointRandomColor);&#xa;                g.drawRect(sampledXRandomScaled, sampledYRandomScaled, 1, 1);&#xa;            }&#xa;            else if(mousePositionX &gt;= 0 &amp;&amp; mousePositionY &gt;=0) {&#xa;                g.setColor(rectangleSelectedColor);&#xa;                setShowWidthHeight();&#xa;                //int x = mousePositionX - showW/2;&#xa;                //int y = mousePositionY - showH/2;&#xa;                //if(x&lt;0) x=0;&#xa;                //if(y&lt;0) y=0;&#xa;                //if(x&gt;this.getWidth()-showW) x = this.getWidth()-showW;&#xa;                //if(y&gt;this.getHeight()-showH) y = this.getHeight()-showH;&#xa;                g.drawRect(mousePositionX, mousePositionY, showW, showH);&#xa;                g.setColor(pointSelectedColor);&#xa;                g.drawRect(selectedXMiddle, selectedYMiddle, 1, 1);&#xa;            }&#xa;        }&#xa;    }&#xa;&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value=" new javax.swing.JPanel(){&#xa;&#xa;    @Override&#xa;    public void paintComponent(Graphics g) {&#xa;        super.paintComponent(g);&#xa;        if(image!=null) {&#xa;&#xa;            if(this.getWidth() != mainPanelW || this.getHeight() != mainPanelH) {&#xa;                scaledImage = getScaledImage(image);&#xa;            }&#xa;            if(scaledImage==null) { scaledImage = getScaledImage(image); }&#xa;            if(scaledImage!=null) {&#xa;                if(scaledImage.getWidth()!=scaledImageW || scaledImage.getHeight()!=scaledImageH) {&#xa;                    scaledImage = getScaledImage(image);&#xa;                }&#xa;            }&#xa;            scaledImageW = scaledImage.getWidth();&#xa;            scaledImageH = scaledImage.getHeight();&#xa;            mainPanelW = this.getWidth();&#xa;            mainPanelH = this.getHeight();&#xa;&#xa;            g.drawImage(scaledImage, 0, 0, this);&#xa;&#xa;            ArrayList&lt;Point2D.Double&gt; pts = sampledPoints.get(images[imageNumber]);&#xa;&#xa;            if (pts != null) {&#xa;                int sN = pts.size();&#xa;                g.setColor(sampledPointsColor);&#xa;                for(Point2D.Double point : pts) {&#xa;                    int x = (int)((double)scaledImageW * point.x);&#xa;                    int y = (int)((double)scaledImageH * point.y);&#xa;                    g.drawRect(x, y, 1, 1);&#xa;&#xa;                }&#xa;                Label_MainImage.setText(&quot;Main Image (Click to set zoomed image). Samples: &quot; + sN);&#xa;            }&#xa;            //System.out.println(&quot;There are &quot; + sN + &quot; points already sampled from &quot; + images[imageNumber]);&#xa;&#xa;            if(sampledXRandom &gt;=0 &amp;&amp; sampledYRandom &gt;= 0 &amp;&amp; CheckBoxMenuItem_RandomizeSampling.isSelected()) {&#xa;&#xa;                double zoom = checkZoom();&#xa;                showW = (int) (((double) Panel_ZoomImage.getWidth() * (double) scaledImage.getWidth() / (double) image.getWidth()) / zoom);&#xa;                showH = (int) (((double) Panel_ZoomImage.getHeight() * (double) scaledImage.getHeight() / (double) image.getHeight()) / zoom);&#xa;&#xa;                int wS = scaledImage.getWidth();&#xa;                int hS = scaledImage.getHeight();&#xa;&#xa;                int w = image.getWidth();&#xa;                int h = image.getHeight();&#xa;&#xa;                int sampledXRandomScaled = (int)((double)sampledXRandom * (double)wS/(double)w);&#xa;                int sampledYRandomScaled = (int)((double)sampledYRandom * (double)hS/(double)h);&#xa;&#xa;                //int rectSize = (int)(0.0025 * (double)w);&#xa;                //if(rectSize == 0 ) rectSize = 5;&#xa;                //int rectX = sampledXRandomScaled - rectSize/2;&#xa;                //int rectY = sampledYRandomScaled - rectSize/2;&#xa;&#xa;                int rectX = sampledXRandomScaled - showW/2;&#xa;                int rectY = sampledYRandomScaled - showH/2;&#xa;                if(rectX &lt; 0) rectX =0;&#xa;                if(rectY &lt; 0) rectY = 0;&#xa;                if(rectX+showW&gt;=wS) rectX=wS-showW;&#xa;                if(rectY+showH&gt;=hS) rectY=hS-showH;&#xa;                g.setColor(rectangleRandomColor);&#xa;                g.drawRect(rectX, rectY, showW, showH);&#xa;                g.setColor(pointRandomColor);&#xa;                g.drawRect(sampledXRandomScaled, sampledYRandomScaled, 1, 1);&#xa;            }&#xa;            else if(mousePositionX &gt;= 0 &amp;&amp; mousePositionY &gt;=0) {&#xa;                g.setColor(rectangleSelectedColor);&#xa;                setShowWidthHeight();&#xa;                //int x = mousePositionX - showW/2;&#xa;                //int y = mousePositionY - showH/2;&#xa;                //if(x&lt;0) x=0;&#xa;                //if(y&lt;0) y=0;&#xa;                //if(x&gt;this.getWidth()-showW) x = this.getWidth()-showW;&#xa;                //if(y&gt;this.getHeight()-showH) y = this.getHeight()-showH;&#xa;                g.drawRect(mousePositionX, mousePositionY, showW, showH);&#xa;                g.setColor(pointSelectedColor);&#xa;                g.drawRect(selectedXMiddle, selectedYMiddle, 1, 1);&#xa;            }&#xa;        }&#xa;&#xa;        if (imageStateHash != null) {&#xa;            setImageState(g);&#xa;        }&#xa;    }&#xa;&#xa;}"/>
       </AuxValues>
 
       <Layout>
@@ -474,7 +471,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="215" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -502,7 +499,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="215" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -664,6 +661,12 @@
       <Properties>
         <Property name="selected" type="boolean" value="true"/>
         <Property name="text" type="java.lang.String" value="Reset on save"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="CheckBox_MutuallyExclusive">
+      <Properties>
+        <Property name="selected" type="boolean" value="true"/>
+        <Property name="text" type="java.lang.String" value="Mutually Exclusive Characters"/>
       </Properties>
     </Component>
   </SubComponents>
