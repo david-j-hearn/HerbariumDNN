@@ -3265,6 +3265,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             if (getTableSelectedCount() > 1) {
                 JOptionPane.showMessageDialog(this, "Warning: Click not registered correctly.\nPlease ensure appropriate box is checked.");
             }
+            System.out.println("There are " + numChar + " characters selected.");
         }
     }//GEN-LAST:event_Table_CharacterChecklistMouseClicked
 

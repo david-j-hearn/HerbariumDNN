@@ -295,6 +295,7 @@ public class Frame_Delete extends javax.swing.JFrame {
         System.out.println("Resetting sampled points");
         fds.readSampledPixels(true);
         fds.setImageStateHash(true);
+        fds.repaint();
         this.setVisible(false);
     }//GEN-LAST:event_Button_OKMouseClicked
 
