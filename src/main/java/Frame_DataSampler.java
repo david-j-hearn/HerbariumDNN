@@ -369,7 +369,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         }
 
         if (this.CheckBoxMenuItem_FastMode.isSelected()) {
-            setImageStateHash();
+            setImageStateHash(true);
         }
     }
 
@@ -404,9 +404,9 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         }
     }
 
-    private void setImageStateHash() {
+    public void setImageStateHash(boolean reinitialize) {
         if (this.CheckBoxMenuItem_FastMode.isSelected()) {
-            if (this.imageStateHash == null) {
+            if (this.imageStateHash == null || reinitialize) {
                 this.imageStateHash = new Hashtable<String, String>(5000);
             }
 
@@ -1174,13 +1174,13 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                             .addComponent(Button_NextImageFile)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(Button_RandomImage)
-                            .addGap(0, 15, Short.MAX_VALUE))
+                            .addGap(0, 0, Short.MAX_VALUE))
                         .addComponent(ComboBox_ImageFiles, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Panel_MainImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(Label_MainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 266, Short.MAX_VALUE)
+                            .addComponent(Label_MainImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGap(12, 12, 12)
-                            .addComponent(TextField_ImageNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(TextField_ImageNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Panel_MainImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -1210,7 +1210,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(TextField_OverviewSize, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGap(0, 0, Short.MAX_VALUE)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(Panel_ZoomImage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1218,31 +1218,28 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addGap(6, 6, 6)
                                     .addComponent(Label_ClickZoomedImage)
-                                    .addGap(0, 13, Short.MAX_VALUE)))
+                                    .addGap(0, 0, Short.MAX_VALUE)))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(Panel_CharacterCheckList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(Label_AddedAttribute)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(ComboBox_AddedAttributeList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(CheckBox_MutuallyExclusive)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(Label_AddedAttribute)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(ComboBox_AddedAttributeList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(CheckBox_ResetOnSave)
-                                            .addGap(25, 25, 25)
-                                            .addComponent(Button_ResetCharacters)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(Button_SaveSample))
-                                        .addComponent(CheckBox_MutuallyExclusive)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(Label_SampleNumber)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(Button_RandomPixel)))
-                                    .addGap(0, 0, Short.MAX_VALUE)))
-                            .addContainerGap())
-                        .addComponent(Panel_CharacterCheckList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                                    .addComponent(Label_SampleNumber)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(Button_RandomPixel)))
+                            .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(CheckBox_ResetOnSave)
+                            .addGap(25, 25, 25)
+                            .addComponent(Button_ResetCharacters)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Button_SaveSample))))
             );
             layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1608,16 +1605,13 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             if (state == null) {
                 return;
             }
-            
+
             g.setColor(new Color(255, 0, 0));
             g.drawString(state, 20, 20);
-        }
-        else {
+        } else {
             System.out.println("Could not set image state due to null imageStateHash");
         }
     }
-
-    
 
     private void resetVariables(boolean deleteClassification, String from) {
         //System.out.println("Resetting variables from " + from);
@@ -3235,7 +3229,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             this.CheckBox_ResetOnSave.setSelected(false);
             this.CheckBox_ResetOnSave.setEnabled(false);
             this.disableRandomAndAutosaveSampling();
-            setImageStateHash();
+            setImageStateHash(true);
         } else {
             this.CheckBox_ResetOnSave.setEnabled(true);
             this.enableRandomAndAutosaveSampling();
@@ -3268,8 +3262,24 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                     this.Table_CharacterChecklist.setValueAt(false, i, 2);
                 }
             }
+            if (getTableSelectedCount() > 1) {
+                JOptionPane.showMessageDialog(this, "Warning: Click not registered correctly.\nPlease ensure appropriate box is checked.");
+            }
         }
     }//GEN-LAST:event_Table_CharacterChecklistMouseClicked
+
+    private int getTableSelectedCount() {
+
+        int numChar = this.Table_CharacterChecklist.getModel().getRowCount();
+        int numSelected = 0;
+        for (int i = 0; i <= numChar - 1; i++) {
+            if (((Boolean) this.Table_CharacterChecklist.getModel().getValueAt(i, 2))) {
+                numSelected++;
+            }
+
+        }
+        return numSelected;
+    }
 
     private void Button_SaveSampleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_SaveSampleActionPerformed
         // TODO add your handling code here:

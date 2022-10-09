@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -106,7 +107,6 @@ public class Frame_Delete extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Label_DeleteMostRecent))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Button_OK)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Button_Cancel)))
@@ -165,8 +165,7 @@ public class Frame_Delete extends javax.swing.JFrame {
     }
 
     private void handleDeleteMostRecent() {
-        String projectFolder = fds.rootDirectory + fds.separator + fds.defaultSamplesDirectory + fds.separator + fds.projectName;
-        ArrayList<Long> sampleIDs = new ArrayList<Long>();
+
         //  get number, N, of samples to delete
         String num = this.TextField_DeleteMostRecent.getText();
         if (num == null) {
@@ -177,6 +176,21 @@ public class Frame_Delete extends javax.swing.JFrame {
         }
         int N = Integer.parseInt(num);
         System.out.println("Deleting the " + N + " most recent samples.");
+
+        if (fds.fastMode) {
+            handleFastModeDelete(N);
+        } else {
+            handleDNNSampleDelete(N);
+        }
+
+        //  reset number sampled
+        System.out.println("Resetting sample number");
+        fds.resetSampleNumber(fds.sampleNumber - N);
+    }
+
+    private void handleDNNSampleDelete(int N) {
+        String projectFolder = fds.rootDirectory + fds.separator + fds.defaultSamplesDirectory + fds.separator + fds.projectName;
+        ArrayList<Long> sampleIDs = new ArrayList<Long>();
         //  read in all samples from metadata files from Training, Testing, Validation subdirectories
         for (String type : fds.types) {
             String sampleDataFile = projectFolder + fds.separator + type + fds.separator + fds.dataFile; //not user settable
@@ -219,10 +233,46 @@ public class Frame_Delete extends javax.swing.JFrame {
             System.out.println("Deleting sampled images from directory " + projectFolder + fds.separator + type);
             deleteSampleImages(projectFolder + fds.separator + type, delSet);
         }
+    }
 
-        //  reset number sampled
-        System.out.println("Resetting sample number");
-        fds.resetSampleNumber(fds.sampleNumber - N);
+    private void handleFastModeDelete(int N) {
+        String sampleDataFile = fds.rootDirectory + fds.separator + fds.defaultSamplesDirectory + fds.separator + fds.projectName + fds.separator + fds.dataFile;
+        ArrayList<Long> sampleIDs = new ArrayList<Long>();
+        //  read in all samples from metadata files from Training, Testing, Validation subdirectories
+
+        System.out.println("Reading samples from " + sampleDataFile);
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(sampleDataFile));
+            String line = reader.readLine(); // skip the header
+            line = reader.readLine();
+            while (line != null) {
+                String[] data = line.split("\\t", 0);
+                String IDString = data[3]; //dangerous - hardcoded!
+                long ID = Long.parseLong(IDString);
+                sampleIDs.add(ID);
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("No metadata file yet.");
+        }
+
+        //  sort samples by timestamp
+        System.out.println("Found a total of " + sampleIDs.size() + " samples. Sorting...");
+        Collections.sort(sampleIDs, Collections.reverseOrder());
+        //  make Set of most recent N samples
+        if (sampleIDs.size() < N) {
+            System.out.println("There are fewer samples than the requested number to delete. Setting the number of samples to delete to " + sampleIDs.size());
+            N = sampleIDs.size();
+        }
+
+        List<Long> delList = sampleIDs.subList(0, N); //the "to index" is exclusive 
+        Set<Long> delSet = new HashSet<Long>(delList);
+
+        System.out.println("Rewriting " + sampleDataFile);
+        rewriteDataFile(sampleDataFile, delSet);
+
     }
 
     private void Button_OKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Button_OKMouseClicked
@@ -231,7 +281,11 @@ public class Frame_Delete extends javax.swing.JFrame {
         boolean all = this.RadioButton_DeleteAll.isSelected();
         //if all
         if (all) {
-            handleDeleteAll();
+            int input = JOptionPane.showConfirmDialog(this,
+                    "You are about to delete all samples.\nDo you want to proceed?", "Confirm delete...", JOptionPane.OK_CANCEL_OPTION);
+            if (input == 0) {
+                handleDeleteAll();
+            }
         } //if most recent
         else {
             System.out.println("Deleting some samples");
@@ -240,6 +294,7 @@ public class Frame_Delete extends javax.swing.JFrame {
         //  reinitialize the set of points that are sampled (for display purposes)
         System.out.println("Resetting sampled points");
         fds.readSampledPixels(true);
+        fds.setImageStateHash(true);
         this.setVisible(false);
     }//GEN-LAST:event_Button_OKMouseClicked
 

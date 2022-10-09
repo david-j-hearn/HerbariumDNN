@@ -69,7 +69,6 @@
                           <Component id="Label_DeleteMostRecent" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="Button_OK" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="Button_Cancel" min="-2" max="-2" attributes="0"/>
