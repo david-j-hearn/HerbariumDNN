@@ -777,6 +777,9 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                 public void mousePressed(java.awt.event.MouseEvent evt) {
                     Table_CharacterChecklistMousePressed(evt);
                 }
+                public void mouseReleased(java.awt.event.MouseEvent evt) {
+                    Table_CharacterChecklistMouseReleased(evt);
+                }
             });
             Table_CharacterChecklist.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
                 public void propertyChange(java.beans.PropertyChangeEvent evt) {
@@ -3256,11 +3259,9 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }//GEN-LAST:event_Table_CharacterChecklistPropertyChange
 
     private void Table_CharacterChecklistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Table_CharacterChecklistMouseClicked
- 
+
     }//GEN-LAST:event_Table_CharacterChecklistMouseClicked
 
-    
-    
     private int getTableSelectedCount() {
 
         int numChar = this.Table_CharacterChecklist.getModel().getRowCount();
@@ -3279,7 +3280,11 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }//GEN-LAST:event_Button_SaveSampleActionPerformed
 
     private void Table_CharacterChecklistMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Table_CharacterChecklistMousePressed
-               if (this.CheckBox_MutuallyExclusive.isSelected()) {
+
+    }//GEN-LAST:event_Table_CharacterChecklistMousePressed
+
+    private void Table_CharacterChecklistMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Table_CharacterChecklistMouseReleased
+        if (this.CheckBox_MutuallyExclusive.isSelected()) {
             int row = Table_CharacterChecklist.rowAtPoint(evt.getPoint());
             int numChar = this.Table_CharacterChecklist.getModel().getRowCount();
 
@@ -3288,13 +3293,13 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                     this.Table_CharacterChecklist.setValueAt(false, i, 2);
                 }
             }
-            numChar = getTableSelectedCount(); 
+            numChar = getTableSelectedCount();
             if (numChar > 1) {
                 JOptionPane.showMessageDialog(this, "Warning: Click not registered correctly.\nPlease ensure appropriate box is checked.");
             }
             System.out.println("There are " + numChar + " characters selected.");
         }
-    }//GEN-LAST:event_Table_CharacterChecklistMousePressed
+    }//GEN-LAST:event_Table_CharacterChecklistMouseReleased
 
     private void classifyPixels(boolean replaceImage) {
         if (image == null) {
