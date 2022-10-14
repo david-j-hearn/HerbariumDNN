@@ -301,6 +301,7 @@ public class Frame_Delete extends javax.swing.JFrame {
 
     private void TextField_DeleteMostRecentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextField_DeleteMostRecentKeyPressed
         Frame_Parameters.setIntegerEditable(evt, this.TextField_DeleteMostRecent);
+        this.RadioButton_DeleteMostRecent.setSelected(true);
     }//GEN-LAST:event_TextField_DeleteMostRecentKeyPressed
 
     private void Button_CancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Button_CancelMouseClicked

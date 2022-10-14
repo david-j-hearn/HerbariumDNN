@@ -457,7 +457,7 @@
         <EventHandler event="componentResized" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="Panel_ZoomImageComponentResized"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xa;    @Override&#xa;    public void paintComponent(Graphics g) {&#xa;        super.paintComponent(g);&#xa;        //if(subImage!=null) {&#xa;            //    scaledImage = getScaledImage(subImage);&#xa;            //    g.drawImage(scaledImage, 0, 0, this);&#xa;            //}&#xa;        setSubimage();&#xa;&#xa;        //g.setColor(Color.RED);&#xa;        //g.drawRect(selectedXZoom, selectedYZoom, 1, 1);&#xa;    }&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xa;    @Override&#xa;    public void paintComponent(Graphics g) {&#xa;        super.paintComponent(g);&#xa;        //if(subImage!=null) {&#xa;            //    scaledImage = getScaledImage(subImage);&#xa;            //    g.drawImage(scaledImage, 0, 0, this);&#xa;            //}&#xa;        //System.out.println(&quot;Repainting subimage&quot;);&#xa;        setSubimage();&#xa;        //System.out.println(&quot;Repainting subimage done&quot;);&#xa;&#xa;        //g.setColor(Color.RED);&#xa;        //g.drawRect(selectedXZoom, selectedYZoom, 1, 1);&#xa;    }&#xa;}"/>
       </AuxValues>
 
       <Layout>

@@ -678,7 +678,9 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                     //    scaledImage = getScaledImage(subImage);
                     //    g.drawImage(scaledImage, 0, 0, this);
                     //}
+                //System.out.println("Repainting subimage");
                 setSubimage();
+                //System.out.println("Repainting subimage done");
 
                 //g.setColor(Color.RED);
                 //g.drawRect(selectedXZoom, selectedYZoom, 1, 1);
@@ -1374,6 +1376,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }
 
     private void checkSaveButton() {
+        //System.out.println("CheckSave");
         if (this.CheckBoxMenuItem_FastMode.isSelected()) {
             this.Button_SaveSample.setEnabled(true);
             disableRandomAndAutosaveSampling();
@@ -1381,7 +1384,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         }
         if (this.CheckBoxMenuItem_Autosave.isSelected()) {
             this.Button_SaveSample.setEnabled(true);
-            disableRandomAndAutosaveSampling();
+            //disableRandomAndAutosaveSampling();
         } else {
             if (this.imagesEnabled && this.attributesEnabled && this.charactersEnabled) {
                 if (currentSample != null) {
@@ -1393,10 +1396,10 @@ public class Frame_DataSampler extends javax.swing.JFrame {
                 this.CheckBoxMenuItem_RandomizeSampling.setEnabled(true);
             } else {
                 this.Button_SaveSample.setEnabled(false);
-                disableRandomAndAutosaveSampling();
+                //disableRandomAndAutosaveSampling();
             }
         }
-        this.repaint();
+        //this.repaint();
     }
 
     private void printImageInfo(String imgFile) {
@@ -1416,6 +1419,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     public void setImagesDirectory(String directory, String rootDir, boolean newProject) {
 
         String dir;
+        imageNumber++;
         //set the directory
         //if (!absolute) {
         //    this.defaultImagesDirectory = directory;
@@ -1566,7 +1570,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             imageScaling = (double) newWidth / (double) image.getWidth();
 
             int newHeight = (int) ((double) image.getHeight() * imageScaling);
-            System.out.println("The original dimensions were " + image.getWidth() + " by " + image.getHeight() + " and the new dimensions are " + newWidth + " by " + newHeight + " with image scaling " + this.imageScaling);
+            //System.out.println("The original dimensions were " + image.getWidth() + " by " + image.getHeight() + " and the new dimensions are " + newWidth + " by " + newHeight + " with image scaling " + this.imageScaling);
             image = scaleImage(image, newWidth, newHeight, BufferedImage.TYPE_INT_RGB, Image.SCALE_SMOOTH);
 
             //System.out.println("The aspect ratio is (w/h)" + ((double) image.getWidth() / (double) image.getHeight()) + " and the width is " + image.getWidth());
@@ -2283,6 +2287,9 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }//GEN-LAST:event_Panel_MainImageMousePressed
 
     private void Panel_ZoomImageMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Panel_ZoomImageMousePressed
+
+        //System.out.println("pressed");
+
         if (this.CheckBoxMenuItem_RandomizeSampling.isSelected() && this.CheckBoxMenuItem_RandomizeSampling.isEnabled()) {
             JOptionPane.showMessageDialog(null, "<html>User sampling of pixels is disabled when random sampling is enabled. <br>Disable random sampling under the Sampling menu to sample pixels, or click 'Next Random Pixel'.</html>");
             return;
@@ -2303,21 +2310,29 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
         setSampleImage(sampledXTrue, sampledYTrue, true);
         checkSaveButton();
+        //setSampleImage(sampledXTrue, sampledYTrue, true);
+
         //if (this.CheckBox_Autosave.isSelected()) {
         if (this.CheckBoxMenuItem_Autosave.isSelected() && this.CheckBoxMenuItem_Autosave.isEnabled()) {
             saveSample();
         }
         try {
-
+            // System.out.println("pressed try to draw point");
+            //this.Panel_ZoomImage.repaint();
             Graphics g1 = this.Panel_ZoomImage.getGraphics();
+            //     System.out.println("pressed try to draw point a");
             g1.setColor(this.pointZoomColor);
+            //    System.out.println("pressed try to draw point b");
             g1.drawRect(selectedXZoom, selectedYZoom, 1, 1);
+            //   System.out.println("pressed try to draw point point is drawn c");
 
         } catch (Exception e) {
+            //         System.out.println("exception in pressed");
         }
     }//GEN-LAST:event_Panel_ZoomImageMousePressed
 
     private void setSampleImage(int x, int y, boolean createCurrentSample) {
+        //System.out.println("Setting sample image");
         if (createCurrentSample) {
             currentSample = this.createSampleImage(x, y);
         }
@@ -2331,18 +2346,14 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }
 
     private void MenuItem_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_ExitActionPerformed
-        if (this.partitionByFile) {
-            if (this.filePartitionType != null) {
-                if (this.filePartitionType.size() > 0) {
-                    readAndCreateSamplePartitionMapping(true);
-                }
-            }
-        }
-        this.closeSessionNotes();
-        System.exit(0);
+        close();
     }//GEN-LAST:event_MenuItem_ExitActionPerformed
 
     private void MenuItem_ExitMenuKeyReleased(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_MenuItem_ExitMenuKeyReleased
+        close();
+    }//GEN-LAST:event_MenuItem_ExitMenuKeyReleased
+
+    private void close() {
         if (this.partitionByFile) {
             if (this.filePartitionType != null) {
                 if (this.filePartitionType.size() > 0) {
@@ -2352,7 +2363,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
         }
         this.closeSessionNotes();
         System.exit(0);
-    }//GEN-LAST:event_MenuItem_ExitMenuKeyReleased
+    }
 
     private void MenuItem_OpenCharactersFileMenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_MenuItem_OpenCharactersFileMenuKeyPressed
 
@@ -2951,12 +2962,14 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }
 
     private void Button_SaveSampleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Button_SaveSampleMouseClicked
-        saveSample();
-        if (this.CheckBox_ResetOnSave.isSelected()) {
-            this.resetTableCharacters();
-        }
-        if (this.CheckBoxMenuItem_RandomizeSampling.isSelected() && this.CheckBoxMenuItem_RandomizeSampling.isEnabled()) {
-            randomlySelectPixel();
+        if (this.Button_SaveSample.isEnabled()) {
+            saveSample();
+            if (this.CheckBox_ResetOnSave.isSelected()) {
+                this.resetTableCharacters();
+            }
+            if (this.CheckBoxMenuItem_RandomizeSampling.isSelected() && this.CheckBoxMenuItem_RandomizeSampling.isEnabled()) {
+                randomlySelectPixel();
+            }
         }
     }//GEN-LAST:event_Button_SaveSampleMouseClicked
 
@@ -2969,7 +2982,8 @@ public class Frame_DataSampler extends javax.swing.JFrame {
     }//GEN-LAST:event_Panel_ZoomImageComponentResized
 
     private void Panel_SampledImageComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_Panel_SampledImageComponentResized
-        //this.currentSample = null;
+        System.out.println("resized sampled image");
+//this.currentSample = null;
         //this.resetVariables(false, "resized Panel_SampledImage");
         //this.scaledImage = null;
         this.subImage = null;
@@ -3297,7 +3311,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
             if (numChar > 1) {
                 JOptionPane.showMessageDialog(this, "Warning: Click not registered correctly.\nPlease ensure appropriate box is checked.");
             }
-            System.out.println("There are " + numChar + " characters selected.");
+            //System.out.println("There are " + numChar + " characters selected.");
         }
     }//GEN-LAST:event_Table_CharacterChecklistMouseReleased
 
