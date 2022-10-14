@@ -296,6 +296,7 @@ public class Frame_DataSampler extends javax.swing.JFrame {
 
     public void initializeDataFromDefaults() {
 
+        System.out.println("Welcome");
         boolean newProject = true;
         checkDirectories();
 
